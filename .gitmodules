@@ -1,0 +1,12 @@
+[submodule "nvidia-modprobe"]
+	path = nvidia-modprobe
+	url = https://github.com/negativo17/nvidia-modprobe
+[submodule "nvidia-driver"]
+	path = nvidia-driver
+	url = https://github.com/negativo17/nvidia-driver
+[submodule "nvidia-persistenced"]
+	path = nvidia-persistenced
+	url = https://github.com/negativo17/nvidia-persistenced
+[submodule "nvidia-kmod-common"]
+	path = nvidia-kmod-common
+	url = https://github.com/negativo17/nvidia-kmod-common
