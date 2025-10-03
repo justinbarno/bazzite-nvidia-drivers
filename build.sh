@@ -4,8 +4,13 @@ set -e
 
 BUILDER_VERSION=43
 FEDORA_VERSIONS=("42" "43")
-ARCHES=("x86_64") #("aarch64" "x86_64")
-DRV_ARCHES=("i386" "x86_64") #("i386" "aarch64" "x86_64")
+if [ -n "$BUILD_ARM" ]; then
+    ARCHES=("aarch64")
+    DRV_ARCHES=("aarch64")
+else
+    ARCHES=("x86_64")
+    DRV_ARCHES=("i386" "x86_64")
+fi
 
 SPEC_RELEASE=$(sed -n 's/^Version:[[:space:]]\+//p' nvidia-driver/nvidia-driver.spec)
 export VERSION=${VERSION:-$SPEC_RELEASE}
