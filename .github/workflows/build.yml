@@ -7,6 +7,13 @@ on:
             description: NVIDIA Driver
             type: string
             required: false
+        nvidia-type:
+            description: Release type
+            type: choice
+            options:
+              - Production
+              - Beta
+              - Legacy
 
 permissions:
   contents: write
@@ -34,9 +41,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
             tag_name: ${{ steps.build.outputs.version }}
-            name: "${{ steps.build.outputs.version }}: Nvidia Release"
+            name: "${{ steps.build.outputs.version }}: Nvidia Release ${{ github.event.inputs.nvidia-type }}"
             body: |
-                This is a release containing binaries for Nvidia driver version ${{ steps.build.outputs.version }}.
+                This is a release containing binaries for Nvidia driver version ${{ steps.build.outputs.version }} (${{ github.event.inputs.nvidia-type }}).
             files: |
                 ./build/RPMS/**/*.rpm
             make_latest: true
