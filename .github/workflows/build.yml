@@ -21,6 +21,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: nvidia-driver-${{ github.event.inputs.nvidia-version || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_kernel:
     environment: prod
