@@ -50,10 +50,10 @@ compile() {
 }
 
 for FEDORA_VERSION in "${FEDORA_VERSIONS[@]}"; do
-    compile nvidia-driver
     compile nvidia-kmod-common
     compile nvidia-modprobe
     compile nvidia-persistenced
+    compile nvidia-driver
 done
 
 echo "$VERSION" > .driver-version
