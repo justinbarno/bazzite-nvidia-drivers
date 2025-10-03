@@ -6,6 +6,7 @@ on:
         nvidia-version:
             description: NVIDIA Driver
             type: string
+            required: false
 
 permissions:
   contents: write
