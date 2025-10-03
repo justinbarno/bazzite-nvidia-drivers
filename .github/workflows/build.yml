@@ -6,17 +6,17 @@ on:
       - master
   workflow_dispatch:
     inputs:
-        nvidia-version:
-            description: NVIDIA Driver
-            type: string
-            required: false
-        nvidia-type:
-            description: Release type
-            type: choice
-            options:
-              - Production
-              - Beta
-              - Legacy
+      nvidia-version:
+        description: NVIDIA Driver
+        type: string
+        required: false
+      nvidia-type:
+        description: Release type
+        type: choice
+        options:
+          - Production
+          - Beta
+          - Legacy
 
 permissions:
   contents: write
@@ -38,26 +38,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-            submodules: true
+          submodules: true
 
       - name: Build Nvidia driver
         id: build
         run: |
-            if [ "${{ matrix.arch }}" == "aarch64" ]; then
-                export BUILD_ARM=true
-            fi
-            VERSION="${{ github.event.inputs.nvidia-version }}" ./build.sh
-            echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
+          if [ "${{ matrix.arch }}" == "aarch64" ]; then
+              export BUILD_ARM=true
+          fi
+          VERSION="${{ github.event.inputs.nvidia-version }}" ./build.sh
+          echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
       - name: Upload Drivers to release
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-            tag_name: ${{ steps.build.outputs.version }}
-            name: "${{ steps.build.outputs.version }}: Nvidia Release ${{ github.event.inputs.nvidia-type }}"
-            body: |
-                This is a release containing binaries for Nvidia driver version ${{ steps.build.outputs.version }} (${{ github.event.inputs.nvidia-type }}).
-            files: |
-                ./build/RPMS/**/*.rpm
-            make_latest: true
+          tag_name: ${{ steps.build.outputs.version }}
+          name: "${{ steps.build.outputs.version }}: Nvidia Release ${{ github.event.inputs.nvidia-type || 'Production' }}"
+          body: |
+            This is a release containing binaries for Nvidia driver version ${{ steps.build.outputs.version }} (${{ github.event.inputs.nvidia-type || 'Production' }}).
+          files: |
+            ./build/RPMS/**/*.rpm
+          make_latest: true
