@@ -10,3 +10,6 @@
 [submodule "nvidia-kmod-common"]
 	path = nvidia-kmod-common
 	url = https://github.com/negativo17/nvidia-kmod-common
+[submodule "nvidia-kmod"]
+	path = nvidia-kmod
+	url = https://github.com/negativo17/nvidia-kmod

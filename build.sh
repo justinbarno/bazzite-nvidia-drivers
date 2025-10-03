@@ -18,6 +18,7 @@ fi
 
 mkdir -p build/SPECS
 cp -f ./nvidia-driver/nvidia-kmod-common*.tar.xz nvidia-kmod-common/
+cp -f ./nvidia-driver/nvidia-kmod*.tar.xz nvidia-kmod/
 
 sudo podman build . --tag 'nvidia_builder' \
     --build-arg UID=$(id -u) --build-arg GID=$(id -g) \
@@ -35,7 +36,9 @@ compile() {
 
     for arch in "${arches[@]}"; do
         # sed version to $VERSION in case we want to run a diff. version
-        SPEC_TMP=build/SPECS/$1-f${FEDORA_VERSION}-${arch}.spec
+        # nvidia-kmod.spec really wants to be named that, so use a subdir
+        SPEC_TMP=build/SPECS/$1-f${FEDORA_VERSION}-${arch}/$1.spec
+        mkdir -p $(dirname $SPEC_TMP)
         cat $1/$1.spec | \
             sed -E "s/^Version:[[:space:]]+.+$/Version: ${VERSION}/gim" \
             > $SPEC_TMP
@@ -50,6 +53,7 @@ compile() {
 }
 
 for FEDORA_VERSION in "${FEDORA_VERSIONS[@]}"; do
+    compile nvidia-kmod
     compile nvidia-kmod-common
     compile nvidia-modprobe
     compile nvidia-persistenced
