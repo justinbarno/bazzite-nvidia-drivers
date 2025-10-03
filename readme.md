@@ -1,2 +1,2 @@
 # Bazzite Nvidia Drivers
-Mirror of https://github.com/negativo17 that builds on Github.
+Mirror of [Negativo17](https://github.com/negativo17) Nvidia repositories that builds on Github.
