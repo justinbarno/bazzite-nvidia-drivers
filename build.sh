@@ -5,6 +5,7 @@ set -e
 BUILDER_VERSION=43
 FEDORA_VERSIONS=("42" "43")
 ARCHES=("x86_64") #("aarch64" "x86_64")
+DRV_ARCHES=("i386" "x86_64") #("i386" "aarch64" "x86_64")
 
 SPEC_RELEASE=$(sed -n 's/^Version:[[:space:]]\+//p' nvidia-driver/nvidia-driver.spec)
 export VERSION=${VERSION:-$SPEC_RELEASE}
@@ -25,7 +26,14 @@ sudo podman build . --tag 'nvidia_builder' \
 compile() {
     sudo podman run --rm -v "$(pwd)/:/workspace" nvidia_builder \
         spectool -g -C $1 $1/$1.spec
-    for arch in "${ARCHES[@]}"; do
+    
+    if [ "$1" == "nvidia-driver" ]; then
+        arches=$DRV_ARCHES
+    else
+        arches=$ARCHES
+    fi
+
+    for arch in "${arches[@]}"; do
         # sed version to $VERSION in case we want to run a diff. version
         SPEC_TMP=build/SPECS/$1-f${FEDORA_VERSION}-${arch}.spec
         cat $1/$1.spec | \
