@@ -11,7 +11,7 @@ export VERSION=${VERSION:-$SPEC_RELEASE}
 
 if [ -z "$SKIP_TARBAL" ]; then
     pushd nvidia-driver
-    ./nvidia-generate-tarballs.sh
+    bash ./nvidia-generate-tarballs.sh
     popd
 fi
 
