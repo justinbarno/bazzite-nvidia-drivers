@@ -1,0 +1,7 @@
+build
+cache
+*.tar.gz
+*.run
+*.tar.xz
+.build*
+.driver-version

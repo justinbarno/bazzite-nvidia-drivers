@@ -1,0 +1,39 @@
+name: Build NVIDIA drivers
+
+on:
+  workflow_dispatch:
+    inputs:
+        nvidia-version:
+            description: NVIDIA Driver
+            type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build_kernel:
+    environment: prod
+    runs-on: 'ubuntu-24.04'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Nvidia driver
+        id: build
+        run: |
+            VERSION="${{ github.event.inputs.nvidia-version }}" ./build.sh
+            echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
+
+      - name: Upload Drivers to release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+            tag_name: ${{ steps.build.outputs.version }}
+            name: "${{ steps.build.outputs.version }}: Nvidia Release"
+            body: |
+                This is a release containing binaries for Nvidia driver version ${{ steps.build.outputs.version }}.
+            files: |
+                ./build/RPMS/**/*.rpm
+            make_latest: true
