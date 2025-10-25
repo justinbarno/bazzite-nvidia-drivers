@@ -58,9 +58,9 @@ compile() {
 }
 
 # compile nvidia-kmod
-# compile nvidia-kmod-common
-# compile nvidia-modprobe
-# compile nvidia-persistenced
+compile nvidia-kmod-common
+compile nvidia-modprobe
+compile nvidia-persistenced
 compile nvidia-driver
 
 echo "$VERSION" > .driver-version
