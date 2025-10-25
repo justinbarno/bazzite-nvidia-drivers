@@ -63,7 +63,7 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
           podman push --digestfile .driver-version localhost/nvidia-oci-f${{ matrix.fedora_version}} \
-          "docker://ghcr.io/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}-${{ matrix.arch }}")
+            "docker://ghcr.io/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}-${{ matrix.arch }}"
           echo "digest=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
       - name: Login to GitHub Container Registry
