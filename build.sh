@@ -66,3 +66,4 @@ for FEDORA_VERSION in "${FEDORA_VERSIONS[@]}"; do
 done
 
 echo "$VERSION" > .driver-version
+echo "$FEDORA_VERSIONS" > .fedora-versions
