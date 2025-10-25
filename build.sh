@@ -3,7 +3,7 @@
 set -e
 
 BUILDER_VERSION=43
-FEDORA_VERSIONS=("42" "43")
+FEDORA_VERSIONS=("43")
 if [ -n "$BUILD_ARM" ]; then
     ARCHES=("aarch64")
     DRV_ARCHES=("aarch64")
