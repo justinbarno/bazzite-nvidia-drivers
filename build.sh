@@ -31,8 +31,13 @@ sudo podman build . --tag 'nvidia_builder' \
     --build-arg FEDORA_VERSION=${BUILDER_VERSION:-43}
 
 compile() {
+    SPEC_TMP=build/SPECS/$1-f${FEDORA_VERSION}/$1.spec
+    mkdir -p $(dirname $SPEC_TMP)
+    cat $1/$1.spec | \
+        sed -E "s/^Version:[[:space:]]+.+$/Version: ${VERSION}/gim" \
+        > $SPEC_TMP
     sudo podman run --rm -v "$(pwd)/:/workspace" nvidia_builder \
-        spectool -g -C $1 $1/$1.spec
+        spectool -g -C $1 $SPEC_TMP
     
     if [ "$1" == "nvidia-driver" ]; then
         arches=$DRV_ARCHES
@@ -43,12 +48,6 @@ compile() {
     for arch in "${arches[@]}"; do
         # sed version to $VERSION in case we want to run a diff. version
         # nvidia-kmod.spec really wants to be named that, so use a subdir
-        SPEC_TMP=build/SPECS/f${FEDORA_VERSION}/$1-${arch}/$1.spec
-        mkdir -p $(dirname $SPEC_TMP)
-        cat $1/$1.spec | \
-            sed -E "s/^Version:[[:space:]]+.+$/Version: ${VERSION}/gim" \
-            > $SPEC_TMP
-
         sudo podman run --privileged --rm -v "$(pwd)/:/workspace" \
             nvidia_builder mock -r fedora-${FEDORA_VERSION}-${arch} --arch=$arch \
                 --resultdir /workspace/build/RPMS/f${FEDORA_VERSION}/$1-${arch} \
