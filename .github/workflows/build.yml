@@ -71,4 +71,4 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
           podman push localhost/nvidia-oci-${{ matrix.fedora_version}} \
-            "docker://ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}"
+            "docker://ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}-${{ matrix.arch }}"
