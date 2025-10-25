@@ -22,7 +22,7 @@ for DIR in ./build/RPMS/f${FEDORA_VERSION}/*; do
     fi
 
     # Copy only binary RPMs (exclude src.rpm) directly into rpms/
-    find "$DIR" -type f -name "*.rpm" ! -name "*.src.rpm" -exec cp -t "$MOCI/rpms/" {} +
+    find "$DIR" -type f -name "*.rpm" ! -name "*.src.rpm" -exec cp -t "$MOCI/" {} +
 done
 
 # Unmount the filesystem
