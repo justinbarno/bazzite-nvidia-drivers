@@ -52,7 +52,7 @@ compile() {
         sudo podman run --privileged --rm -v "$(pwd)/:/workspace" \
             nvidia_builder mock -r fedora-${FEDORA_VERSION}-${arch} --arch=$arch \
                 --resultdir /workspace/build/RPMS/f${FEDORA_VERSION}/$1-${arch} \
-                --sources /workspace/$1 --spec /workspace/$SPEC_TMP
+                --sources /workspace/$1 --spec /workspace/$SPEC_TMP --verbose
     done
 }
 
