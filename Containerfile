@@ -2,7 +2,7 @@ ARG FEDORA_VERSION=42
 
 FROM fedora:${FEDORA_VERSION}
 
-RUN dnf install -y mock mock-core-configs spectool qemu-user-static qemu-user-binfmt
+RUN dnf install -y mock mock-core-configs spectool
 
 ARG UID=1000
 ARG GID=1000
