@@ -58,7 +58,7 @@ compile() {
     done
 }
 
-compile nvidia-kmod
+# compile nvidia-kmod
 compile nvidia-kmod-common
 compile nvidia-modprobe
 compile nvidia-persistenced
