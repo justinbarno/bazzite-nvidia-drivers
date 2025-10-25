@@ -48,8 +48,10 @@ compile() {
     for arch in "${arches[@]}"; do
         # sed version to $VERSION in case we want to run a diff. version
         # nvidia-kmod.spec really wants to be named that, so use a subdir
+        mkdir -p ./build/MOCK/$arch
         sudo podman run --privileged --rm -v "$(pwd)/:/workspace" \
-            nvidia_builder mock -r fedora-${FEDORA_VERSION}-${arch} --arch=$arch \
+            -v "$(pwd)/build/MOCK/$arch:/var/lib/mock" nvidia_builder \
+            mock -r fedora-${FEDORA_VERSION}-${arch} --arch=$arch \
                 --resultdir /workspace/build/RPMS/f${FEDORA_VERSION}/$1-${arch} \
                 --sources /workspace/$1 --spec /workspace/$SPEC_TMP --verbose
     done
