@@ -49,10 +49,8 @@ compile() {
             sed -E "s/^Version:[[:space:]]+.+$/Version: ${VERSION}/gim" \
             > $SPEC_TMP
 
-        mkdir -p ./build/MOCK/$arch
         sudo podman run --privileged --rm -v "$(pwd)/:/workspace" \
-            -v "$(pwd)/build/MOCK/$arch:/var/lib/mock" nvidia_builder \
-            mock -r fedora-${FEDORA_VERSION}-${arch} --arch=$arch \
+            nvidia_builder mock -r fedora-${FEDORA_VERSION}-${arch} --arch=$arch \
                 --resultdir /workspace/build/RPMS/f${FEDORA_VERSION}/$1-${arch} \
                 --sources /workspace/$1 --spec /workspace/$SPEC_TMP
     done
