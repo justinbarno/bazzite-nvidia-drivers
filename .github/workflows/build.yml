@@ -52,7 +52,6 @@ jobs:
           fi
           VERSION="${{ github.event.inputs.nvidia-version }}" \
             FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
-          echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
       - name: Build OCI image with drivers
         id: oci
@@ -63,9 +62,9 @@ jobs:
         id: upload
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
-          digest=$(podman push localhost/nvidia-oci-f${{ matrix.fedora_version}} \
-            "docker://ghcr.io/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}-${{ matrix.arch }}")
-          echo "digest=${digest}" >> $GITHUB_OUTPUT
+          podman push --digestfile .driver-version localhost/nvidia-oci-f${{ matrix.fedora_version}} \
+          "docker://ghcr.io/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}-${{ matrix.arch }}")
+          echo "digest=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
