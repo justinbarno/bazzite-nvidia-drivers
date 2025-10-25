@@ -2,8 +2,9 @@
 
 set -e
 
-BUILDER_VERSION=43
-FEDORA_VERSIONS=("43")
+FEDORA_VERSION=${FEDORA_VERSION:-43}
+BUILDER_VERSION=${BUILDER_VERSION:-$FEDORA_VERSION}
+
 if [ -n "$BUILD_ARM" ]; then
     ARCHES=("aarch64")
     DRV_ARCHES=("aarch64")
@@ -57,13 +58,10 @@ compile() {
     done
 }
 
-for FEDORA_VERSION in "${FEDORA_VERSIONS[@]}"; do
-    compile nvidia-kmod
-    compile nvidia-kmod-common
-    compile nvidia-modprobe
-    compile nvidia-persistenced
-    compile nvidia-driver
-done
+compile nvidia-kmod
+compile nvidia-kmod-common
+compile nvidia-modprobe
+compile nvidia-persistenced
+compile nvidia-driver
 
 echo "$VERSION" > .driver-version
-echo "$FEDORA_VERSIONS" > .fedora-versions

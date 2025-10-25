@@ -19,7 +19,10 @@ on:
           - Legacy
 
 permissions:
+  id-token: write
   contents: write
+  attestations: write
+  packages: write
 
 concurrency:
   group: nvidia-driver-${{ github.event.inputs.nvidia-version || github.ref }}
@@ -32,6 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         arch: ["x86_64", "aarch64"]
+        fedora_version: ["43"]
     runs-on: ${{ matrix.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
 
     steps:
@@ -46,18 +50,25 @@ jobs:
           if [ "${{ matrix.arch }}" == "aarch64" ]; then
               export BUILD_ARM=true
           fi
-          VERSION="${{ github.event.inputs.nvidia-version }}" ./build.sh
+          VERSION="${{ github.event.inputs.nvidia-version }}" \
+            FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
           echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
-
-      - name: Upload Drivers to release
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build OCI image with drivers
+        id: oci
+        run: |
+            FEDORA_VERSION="${{ matrix.fedora_version }}" buildah unshare ./oci.sh
+            echo "digest=$(cat ./oci-digest)" >> $GITHUB_OUTPUT
+      
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
         with:
-          tag_name: ${{ steps.build.outputs.version }}
-          name: "${{ steps.build.outputs.version }}: Nvidia Release ${{ github.event.inputs.nvidia-type || 'Production' }}"
-          body: |
-            This is a release containing binaries for Nvidia driver version ${{ steps.build.outputs.version }} (${{ github.event.inputs.nvidia-type || 'Production' }}).
-          files: |
-            ./build/RPMS/**/*.rpm
-          make_latest: true
+          subject-digest: "${{ steps.oci.outputs.digest }}"
+          subject-name: "ghcr.io/${{ github.repository_owner }}/${{ github.repository }}"
+          push-to-registry: true
+
+      - name: Upload OCI image to Registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+          podman push localhost/nvidia-oci-${{ matrix.fedora_version}} \
+            "docker://ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:${{ steps.build.outputs.version }}-f${{ matrix.fedora_version }}"

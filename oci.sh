@@ -29,10 +29,10 @@ done
 buildah unmount $BOCI
 
 # Commit the image
-buildah commit $BOCI nvidia_oci_image
+buildah commit $BOCI nvidia-oci-f${FEDORA_VERSION}
 
 # Get digest
-DIGEST=$(buildah images --noheading --format "{{.Digest}}" nvidia_oci_image)
+DIGEST=$(buildah images --noheading --format "{{.Digest}}" nvidia-oci-f${FEDORA_VERSION})
 echo "OCI Image created with digest: $DIGEST"
 
 echo $DIGEST > .oci-digest
