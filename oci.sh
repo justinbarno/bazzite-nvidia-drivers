@@ -13,8 +13,6 @@ trap 'buildah rm $BOCI' ERR
 # Mount the filesystem
 MOCI=$(buildah mount $BOCI)
 
-mkdir -p $MOCI/rpms
-
 # Copy rpms from ./build/RPMS/fVER for each fVER
 for DIR in ./build/RPMS/f${FEDORA_VERSION}/*; do
     if [ ! -d "$DIR" ]; then
