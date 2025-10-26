@@ -73,6 +73,13 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload OCI image as latest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+          podman push localhost/nvidia-oci-f${{ matrix.fedora_version}} \
+            "docker://ghcr.io/${{ github.repository }}:latest-f${{ matrix.fedora_version }}-${{ matrix.arch }}"
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
