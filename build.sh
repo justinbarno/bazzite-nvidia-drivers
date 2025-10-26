@@ -1,9 +1,10 @@
 #!/bin/bash
 
-set -e
+set -eoux pipefail
 
 FEDORA_VERSION=${FEDORA_VERSION:-43}
 BUILDER_VERSION=${BUILDER_VERSION:-$FEDORA_VERSION}
+BUILD_ARM=${BUILD_ARM:-}
 
 if [ -n "$BUILD_ARM" ]; then
     ARCHES=("aarch64")
@@ -40,9 +41,9 @@ compile() {
         spectool -g -C $1 $SPEC_TMP
     
     if [ "$1" == "nvidia-driver" ]; then
-        arches=$DRV_ARCHES
+        arches=("${DRV_ARCHES[@]}")
     else
-        arches=$ARCHES
+        arches=("${ARCHES[@]}")
     fi
 
     for arch in "${arches[@]}"; do
