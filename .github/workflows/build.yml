@@ -47,16 +47,12 @@ jobs:
       - name: Build Nvidia driver
         id: build
         run: |
-          # if [ "${{ matrix.arch }}" == "aarch64" ]; then
-          #     export BUILD_ARM=true
-          # fi
-          # VERSION="${{ github.event.inputs.nvidia-version }}" \
-          #   FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
-          # echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
-
-          echo "version=999.99.99" >> $GITHUB_OUTPUT
-          mkdir -p ./build/RPMS/f${{ matrix.fedora_version }}/${{ matrix.arch }}
-
+          if [ "${{ matrix.arch }}" == "aarch64" ]; then
+              export BUILD_ARM=true
+          fi
+          VERSION="${{ github.event.inputs.nvidia-version }}" \
+            FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
+          echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
       - name: Build OCI image with drivers
         id: oci
