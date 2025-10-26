@@ -52,6 +52,7 @@ jobs:
           fi
           VERSION="${{ github.event.inputs.nvidia-version }}" \
             FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
+          echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
       - name: Build OCI image with drivers
         id: oci
@@ -76,6 +77,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v3
         with:
-          subject-digest: "sha256:${{ steps.upload.outputs.digest }}"
+          subject-digest: "${{ steps.upload.outputs.digest }}"
           subject-name: "ghcr.io/${{ github.repository }}"
           push-to-registry: true
