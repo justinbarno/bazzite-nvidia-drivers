@@ -2,7 +2,7 @@
 
 set -eoux pipefail
 
-ARCH=${ARCH:-x86_64}
+ARCH=$(uname -m)
 FEDORA_VERSION=${FEDORA_VERSION:-43}
 
 rm -rf build/NVT/centos8/$ARCH
