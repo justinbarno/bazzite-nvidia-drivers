@@ -13,3 +13,6 @@
 [submodule "nvidia-kmod"]
 	path = nvidia-kmod
 	url = https://github.com/negativo17/nvidia-kmod
+[submodule "nvidia-container-toolkit"]
+	path = nvidia-container-toolkit
+	url = https://github.com/NVIDIA/nvidia-container-toolkit
