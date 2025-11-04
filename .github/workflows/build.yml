@@ -50,10 +50,10 @@ jobs:
           if [ "${{ matrix.arch }}" == "aarch64" ]; then
               export BUILD_ARM=true
           fi
-          VERSION="${{ github.event.inputs.nvidia-version }}" \
+          FEDORA_VERSION="${{ matrix.fedora_version }}" ./build-nct.sh
+          VERSION="${{ github.event.inputs.nvidia-version || '580.105.08' }}" \
             FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
           echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
-          FEDORA_VERSION="${{ matrix.fedora_version }}" ./build-nct.sh
 
       - name: Build OCI image with drivers
         id: oci
