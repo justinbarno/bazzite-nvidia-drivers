@@ -20,7 +20,7 @@ export VERSION=${VERSION:-$SPEC_RELEASE}
 
 if [ -z "$SKIP_TARBAL" ]; then
     pushd nvidia-driver
-    ARCHES="x86_64 aarch64" bash ./nvidia-generate-tarballs.sh
+    ARCHES="$(uname -m)" bash ./nvidia-generate-tarballs.sh
     popd
 fi
 
