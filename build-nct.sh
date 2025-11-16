@@ -18,7 +18,7 @@ git -C ./nvidia-container-toolkit/third_party/libnvidia-container fetch --depth=
 LIB_NAME="nct" DIST_DIR="$(pwd)/build/NVT" \
     make -C ./nvidia-container-toolkit LIB_TAG="" DOCKER=podman centos8-$ARCH
 DIST_DIR="$(pwd)/build/NVT" \
-    make -C ./nvidia-container-toolkit/third_party/libnvidia-container -f mk/docker.mk LIB_VERSION="" centos8-$ARCH
+    make -C ./nvidia-container-toolkit/third_party/libnvidia-container -f mk/docker.mk centos8-$ARCH
 rm -rf ./build/RPMS/f$FEDORA_VERSION/nvt-$ARCH
 mkdir -p ./build/RPMS/f$FEDORA_VERSION/nvt-$ARCH
 mv build/NVT/centos8/$ARCH/*.rpm ./build/RPMS/f$FEDORA_VERSION/nvt-$ARCH
