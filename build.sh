@@ -61,6 +61,7 @@ compile() {
 
 # compile nvidia-kmod
 compile nvidia-kmod-common
+compile nvidia-settings
 compile nvidia-modprobe
 compile nvidia-persistenced
 compile nvidia-driver
