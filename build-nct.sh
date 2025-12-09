@@ -11,6 +11,11 @@ mkdir -p build/NVT/centos8/$ARCH
 export DOCKER="podman"
 export PATH="$(pwd):$PATH"
 
+# Fix urls
+sed -i 's|https://storage.googleapis.com/golang/go|https://dl.google.com/go/go|g' \
+    $(grep -rl 'https://storage.googleapis.com/golang/go' ./nvidia-container-toolkit) \
+    || true
+
 # Get previous for libnvidia-container manually
 git -C ./nvidia-container-toolkit/third_party/libnvidia-container fetch --depth=200
 LIB_VERSION=$(git -C ./nvidia-container-toolkit/third_party/libnvidia-container describe --tags --abbrev=0 | sed 's/^v//')
