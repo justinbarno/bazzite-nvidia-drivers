@@ -51,7 +51,7 @@ jobs:
               export BUILD_ARM=true
           fi
           FEDORA_VERSION="${{ matrix.fedora_version }}" ./build-nct.sh
-          VERSION="${{ github.event.inputs.nvidia-version || '580.105.08' }}" \
+          VERSION="${{ github.event.inputs.nvidia-version }}" \
             FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
           echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
