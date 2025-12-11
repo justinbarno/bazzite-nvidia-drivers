@@ -19,3 +19,6 @@
 [submodule "nvidia-settings"]
 	path = nvidia-settings
 	url = https://github.com/negativo17/nvidia-settings
+[submodule "nvidia-580"]
+	path = nvidia-580
+	url = https://github.com/negativo17/nvidia-580

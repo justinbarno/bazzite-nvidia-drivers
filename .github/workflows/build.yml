@@ -7,16 +7,13 @@ on:
   workflow_dispatch:
     inputs:
       nvidia-version:
-        description: NVIDIA Driver
+        description: Driver Version
         type: string
         required: false
-      nvidia-type:
-        description: Release type
-        type: choice
-        options:
-          - Production
-          - Beta
-          - Legacy
+      nvidia-legacy-version:
+        description: Legacy Driver Version
+        type: string
+        required: false
 
 permissions:
   id-token: write
@@ -34,8 +31,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: ["x86_64"] # , "aarch64"
+        arch: ["x86_64", "aarch64"]
         fedora_version: ["43"]
+        legacy: [false, true]
     runs-on: ${{ matrix.arch == 'aarch64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
 
     steps:
@@ -51,7 +49,8 @@ jobs:
               export BUILD_ARM=true
           fi
           FEDORA_VERSION="${{ matrix.fedora_version }}" ./build-nct.sh
-          VERSION="${{ github.event.inputs.nvidia-version }}" \
+          VERSION="${{ matrix.legacy && github.event.inputs.nvidia-legacy-version || github.event.inputs.nvidia-version }}" \
+            LEGACY="${{ matrix.legacy && '1' || '' }}" \
             FEDORA_VERSION="${{ matrix.fedora_version }}" ./build.sh
           echo "version=$(cat .driver-version)" >> $GITHUB_OUTPUT
 
